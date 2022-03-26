@@ -8,6 +8,16 @@ then
 	docker rm $(docker stop $CURRENT_INSTANCE)
 fi
 
+# Pull down the instance from dockerhub
+docker pull $IMAGE_NAME
+
+# check if a docker container exists with the name of node_app if it does remove the container
+CONTAINER_EXISTS=$(docker ps -a | grep node_app)
+if [ "$CONTAINER_EXISTS" ]
+then
+	docker rm node_app
+fi
+
 # Create a container called node_app that is available on port 8443 from our docker image
 docker create -p 8443:8443 --name node_app $IMAGE_NAME
 # Write the private key to a file
